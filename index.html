@@ -1,65 +1,27 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <title></title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <link rel="stylesheet" href="TemplateData/style.css">
-  <style>
-    html, body {
-      margin: 0;
-      padding: 0;
-      overflow: hidden;
-      height: 100%;
-      background: #000;
-    }
-    #unity-container {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: #000;
-    }
-    #unity-canvas {
-      width: 100%;
-      height: 100%;
-      background: #000;
-    }
-   </style>
-</head>
-<body>
-    <div class="webgl-content" style="width: 100%; height: 100%;">
-        <div id="unityContainer" style="width: 100%; height: 100%;"></div>
-    </div>
-
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <title>{{{ PRODUCT_NAME }}}</title>
+    <style>
+      body { margin: 0; background-color: #233343; display: flex; justify-content: center; align-items: center; height: 100vh; }
+      canvas { width: {{{ WIDTH }}}px; height: {{{ HEIGHT }}}px; background: #000; }
+    </style>
+  </head>
+  <body>
+    <!-- The engine automatically hooks into this canvas element -->
+    <canvas id="unity-canvas"></canvas>
+    <script src="Build/{{{ LOADER_FILENAME }}}"></script>
     <script>
-    (function(zonefile) { 
-    var y = "cpmstarx";
-    var drutObj = window[y] = window[y] || {};
-    function failCpmstarAPI() { var failFn = function(o) { o && typeof(o) === "object" && o.fail && o.fail(); }; drutObj && Array.isArray(drutObj.cmd) && drutObj.cmd.forEach(failFn) && (drutObj.cmd.length = 0);  window.cpmstarAPI = window["_"+zonefile] = failFn; }
-    var rnd = Math.round(Math.random()*999999);
-    var s = document.createElement('script'); s.type = 'text/javascript'; s.async = true; s.onerror=failCpmstarAPI;
-    var proto = document.location.protocol;
-    var host = ( proto == "https:" || proto == "file:")?"https://server":"//cdn";
-    if(window.location.hash=="#cpmstarDev") host = "//dev.server";
-    if(window.location.hash=="#cpmstarStaging") host = "//staging.server"; 
-    s.src = host + ".cpmstar.com/cached/zonefiles/" + zonefile + ".js?rnd="+rnd; 
-    var s2=document.getElementsByTagName('script')[0];
-    s2.parentNode.insertBefore(s, s2);
-    window.cpmstarAPI = function(o) { (drutObj.cmd = drutObj.cmd || []).push(o); }
-    }('689_52028_gameapi'));
+      createUnityInstance(document.querySelector("#unity-canvas"), {
+        dataUrl: "Build/{{{ DATA_FILENAME }}}",
+        frameworkUrl: "Build/{{{ FRAMEWORK_FILENAME }}}",
+        codeUrl: "Build/{{{ CODE_FILENAME }}}",
+        streamingAssetsUrl: "StreamingAssets",
+        companyName: "{{{ COMPANY_NAME }}}",
+        productName: "{{{ PRODUCT_NAME }}}",
+        productVersion: "{{{ PRODUCT_VERSION }}}",
+      });
     </script>
-
-    <script src="../UnityProgress.js"></script>
-    <script src="../UnityLoader.js"></script>
-
-	<script>
-        var unityInstance = UnityLoader.instantiate("unityContainer", "Build/Game.json", {onProgress: UnityProgress});
-    </script>
-<script defer src="https://static.cloudflareinsights.com/beacon.min.js/v833ccba57c9e4d2798f2e76cebdd09a11778172276447" integrity="sha512-57MDmcccJXYtNnH+ZiBwzC4jb2rvgVCEokYN+L/nLlmO8rfYT/gIpW2A569iJ/3b+0UEasghjuZH/ma3wIs/EQ==" data-cf-beacon='{"version":"2024.11.0","token":"fca267d0583d40efb2f59b88993db820","r":1,"server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
-</body>
+  </body>
 </html>
